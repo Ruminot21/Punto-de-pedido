@@ -1,0 +1,252 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a;
+    color: #f2f2f2;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(90deg, #ff4d4d, #ff6a00);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-right: 20px;
+    position: relative;
+}
+
+#search-bar {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #f2f2f2;
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #888;
+}
+
+.cart-mini {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.cart-mini span {
+    font-size: 16px;
+}
+
+main {
+    padding: 20px;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.product-item {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s;
+}
+
+.product-item:hover {
+    transform: scale(1.05);
+}
+
+.product-item h3 {
+    margin-top: 0;
+}
+
+.product-item button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.product-item button:hover {
+    background-color: #ff6a00;
+}
+
+.floating-cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff4d4d;
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.2s;
+}
+
+.floating-cart:hover {
+    background-color: #ff6a00;
+}
+
+.cart-details {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    display: none;
+    color: white;
+    max-width: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.cart-details h3 {
+    margin-top: 0;
+}
+
+.cart-details ul {
+    list-style: none;
+    padding: 0;
+}
+
+.cart-details ul li {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-details ul li .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cart-details ul li .quantity-controls button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cart-details ul li .quantity-controls button:hover {
+    background-color: #ff6a00;
+}
+
+.delivery-options, .payment-options {
+    margin: 20px 0;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.delivery-options h2, .payment-options h2 {
+    margin-top: 0;
+}
+
+#send-order, #print-ticket {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 30px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+#send-order:hover, #print-ticket:hover {
+    background-color: #ff6a00;
+}
+
+/* Estilo del ticket */
+#ticket {
+    width: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#ticket h1, #ticket h2, #ticket p {
+    margin: 0;
+    padding: 0;
+}
+
+#ticket h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#ticket h2 {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#ticket p {
+    margin-bottom: 10px;
+}
+
+#ticket .item {
+    display: flex;
+    justify-content: space-between;
+}
+
+#ticket .item span {
+    display: inline-block;
+}
+
+#ticket .total {
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: right;
+}
+
+#ticket .footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Pedidos Futurista</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Buscar productos...">
+            <span class="search-icon">🔍</span>
+        </div>
+        <div class="cart-mini">
+            <span id="cart-count">0</span>
+            <span>productos - $<span id="cart-subtotal">0.00</span></span>
+        </div>
+    </header>
+    
+    <main>
+        <div class="product-list" id="product-list">
+            <!-- Productos serán generados aquí -->
+        </div>
+    </main>
+
+    <div class="floating-cart" id="floating-cart">
+        🛒
+    </div>
+
+    <div class="cart-details" id="cart-details">
+        <h3>Carrito</h3>
+        <ul id="cart-items">
+            <!-- Elementos del carrito se mostrarán aquí -->
+        </ul>
+        <p>Total: $<span id="cart-total">0.00</span></p>
+        <div class="delivery-options">
+            <h2>Opciones de entrega</h2>
+            <label>
+                <input type="radio" name="delivery" value="local" checked> Recoger en local
+            </label>
+            <label>
+                <input type="radio" name="delivery" value="address"> Entrega a domicilio
+            </label>
+            <input type="text" id="delivery-address" placeholder="Ingrese su dirección" disabled>
+        </div>
+        <div class="payment-options">
+            <h2>Opciones de pago</h2>
+            <label>
+                <input type="radio" name="payment" value="card" checked> Tarjeta de crédito
+            </label>
+            <label>
+                <input type="radio" name="payment" value="cash"> Efectivo
+            </label>
+            <label>
+                <input type="radio" name="payment" value="transfer"> Transferencia
+            </label>
+        </div>
+        <button id="send-order">Enviar pedido por WhatsApp</button>
+        <button id="print-ticket">Imprimir ticket</button>
+    </div>
+
+    <div id="ticket" style="display:none;">
+        <h1>LA PICA DE ROSITA</h1>
+        <p>Dirección: PRESBITERO MORAGA #236</p>
+        <p>Teléfono: +56935442424</p>
+        <h2>Pedido</h2>
+        <div id="ticket-items">
+            <!-- Elementos del ticket se mostrarán aquí -->
+        </div>
+        <div class="total">
+            <p>Total: $<span id="ticket-total">0.00</span></p>
+        </div>
+        <p class="footer">¡Gracias por su compra!</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
