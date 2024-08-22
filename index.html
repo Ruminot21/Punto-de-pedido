@@ -1,299 +1,470 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Digital</title>
+    <title>App de Pedidos Futurista</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
+            background-color: #1a1a1a;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            color: #fff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 5px auto;
+            padding: 0px;
+            background: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            text-align: center;
+            color: #ff6f61;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+        .order-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .order-form input, .order-form select {
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #333;
+            color: #fff;
+        }
+        .product-list-container {
+            overflow-x: auto;
+        }
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .product-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .menu-container, .tabs {
-            width: 80%;
-            max-width: 1200px;
-            margin: 20px;
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            background-color: #fff;
-            border: 1px solid #ccc;
+            padding: 5px;
+            background: #3a3a3a;
+            border: 1px solid #444;
             border-radius: 5px;
-            margin: 0 5px;
-            transition: background-color 0.2s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, background 0.3s;
         }
-
-        .tab:hover, .tab.active {
-            background-color: #007bff;
+        .product-item:hover {
+            transform: scale(1.05);
+            background: #444;
+        }
+        .product-item span {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #ff6f61;
+        }
+        .product-item input {
+            margin-top: 5px;
+            width: 60px;
+            text-align: center;
+            border: 1px solid #444;
+            background: #333;
             color: #fff;
         }
-
-        .menu {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        .menu-item {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 10px;
-            margin: 10px;
-            width: 200px;
-            text-align: center;
-            background-color: #fff;
+        .product-item button {
+            padding: 5px 10px;
+            font-size: 18px;
+            border: none;
+            background: #ff6f61;
+            color: white;
             cursor: pointer;
-            transition: transform 0.2s;
+            margin: 0 5px;
+            border-radius: 5px;
         }
-
-        .menu-item:hover {
-            transform: scale(1.05);
+        .product-item button:hover {
+            background: #e65c50;
         }
-
+        .orders-list {
+            margin-top: 20px;
+        }
+        .order-item {
+            background: #3a3a3a;
+            padding: 5px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+        .subtotal {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
         .cart {
             position: fixed;
             top: 20px;
             right: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 300px;
-            max-height: 80vh;
-            overflow-y: auto;
+            background: #ff6f61;
+            color: #fff;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1000;
         }
-
-        .cart-item {
+        .cart-counter {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #fff;
+            color: #ff6f61;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .cart-items {
+            display: none;
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #2a2a2a;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            max-width: 300px;
+            z-index: 1000;
+        }
+        .cart-items.active {
+            display: block;
+        }
+        .cart-items h3 {
+            margin-top: 0;
+            color: #ff6f61;
+        }
+        .cart-items ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .cart-items ul li {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
         }
-
-        .cart-item h3, .cart-item p {
+        .cart-items ul li span {
+            margin-right: 10px;
+            color: #ff6f61;
+        }
+        .cart-items ul li button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #ff6f61;
+        }
+        .cart-items ul li button:focus {
+            outline: none;
+        }
+        .cart-items button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff6f61;
+            color: white;
+            cursor: pointer;
+        }
+        .cart-items button:hover {
+            background-color: #e65c50;
+        }
+        .floating-footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #2a2a2a;
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+        .floating-footer .subtotal {
             margin: 0;
+            color: #ff6f61;
         }
-
-        .cart-item button {
-            padding: 5px 10px;
-            background-color: #dc3545;
-            color: #fff;
-            border: none;
+        .floating-footer button {
+            padding: 15px 20px;
+            font-size: 18px;
             border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .cart-item button:hover {
-            background-color: #c82333;
-        }
-
-        .cart-total {
-            text-align: right;
-            font-size: 1.2em;
-            margin-top: 20px;
-        }
-
-        #order-btn, #share-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
             border: none;
-            border-radius: 5px;
+            background-color: #ff6f61;
+            color: white;
             cursor: pointer;
-            transition: background-color 0.2s;
         }
-
-        #order-btn:hover, #share-btn:hover {
-            background-color: #0069d9;
+        .floating-footer button:hover {
+            background-color: #e65c50;
         }
-
-        #share-btn {
-            margin-left: 10px;
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .login-container h2 {
+            text-align: center;
+            color: #ff6f61;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #333;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ff6f61;
+            color: white;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #e65c50;
         }
     </style>
 </head>
 <body>
-    <div class="tabs">
-        <!-- Las pestañas de categorías se insertarán aquí dinámicamente -->
+    <div id="loginSection" class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" id="username" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button onclick="login()">Ingresar</button>
     </div>
-    <div class="menu-container">
-        <div class="menu" id="menu">
-            <h2>Menú</h2>
-            <!-- Los items del menú se insertarán aquí dinámicamente -->
+
+    <div id="appSection" class="container" style="display: none;">
+        <h1>RESTAURANT</h1>
+        <div class="order-form">
+            <input type="text" id="customerName" placeholder="Nombre del cliente">
+            <input type="text" id="customerAddress" placeholder="Dirección del cliente">
+            <div class="product-list-container">
+                <div class="product-list" id="productList">
+                    <!-- Los productos se agregarán aquí mediante JavaScript -->
+                </div>
+            </div>
+        </div>
+        <div class="orders-list" id="ordersList">
+            <!-- Aquí se mostrarán los pedidos -->
         </div>
     </div>
-    <div class="cart" id="cart">
-        <h2>Carrito</h2>
-        <!-- Los items del carrito se insertarán aquí dinámicamente -->
-        <div class="cart-total" id="cart-total">Subtotal: $0.00</div>
-        <button id="order-btn">Hacer Pedido</button>
-        <button id="share-btn">Compartir Lista</button>
+
+    <div class="cart" onclick="toggleCart()">
+        🛒<div class="cart-counter" id="cartCounter">0</div>
+    </div>
+    <div class="cart-items" id="cartItems">
+        <h3>Carrito</h3>
+        <ul id="cartList"></ul>
+        <p class="subtotal">Subtotal: $<span id="cartSubtotal">0.00</span></p>
+        <button onclick="sendOrderToWhatsApp()">Enviar a WhatsApp</button>
+    </div>
+
+    <div class="floating-footer" style="display: none;">
+        <p class="subtotal">Subtotal: $<span id="subtotal">0.00</span></p>
+        <button onclick="placeOrder()">Realizar Pedido</button>
     </div>
 
     <script>
-        const SHEET_ID = 'TU_GOOGLE_SHEET_ID';
-        const API_KEY = 'TU_API_KEY';
-        const SHEET_NAME = 'Hoja1';
+        document.addEventListener('DOMContentLoaded', () => {
+            const authenticated = localStorage.getItem('authenticated');
+            if (authenticated) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('appSection').style.display = 'block';
+                document.querySelector('.floating-footer').style.display = 'flex';
+                loadProducts();
+            }
+        });
 
-        const menuContainer = document.getElementById('menu');
-        const cartContainer = document.getElementById('cart');
-        const cartTotal = document.getElementById('cart-total');
-        const tabsContainer = document.querySelector('.tabs');
-        let cart = [];
-        let products = [];
-        let categories = new Set();
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`)
-            .then(response => response.json())
-            .then(data => {
-                const rows = data.values;
-                rows.forEach(row => {
-                    const [name, price, category] = row;
-                    products.push({ name, price, category });
-                    categories.add(category);
-                });
-                renderTabs();
-                renderMenu('Todas');
-            })
-            .catch(error => console.error('Error fetching data from Google Sheets:', error));
-
-        function renderTabs() {
-            tabsContainer.innerHTML = '';
-            const allTab = document.createElement('div');
-            allTab.classList.add('tab', 'active');
-            allTab.innerText = 'Todas';
-            allTab.addEventListener('click', () => renderMenu('Todas'));
-            tabsContainer.appendChild(allTab);
-
-            categories.forEach(category => {
-                const tab = document.createElement('div');
-                tab.classList.add('tab');
-                tab.innerText = category;
-                tab.addEventListener('click', () => renderMenu(category));
-                tabsContainer.appendChild(tab);
-            });
-        }
-
-        function renderMenu(category) {
-            menuContainer.innerHTML = '<h2>Menú</h2>';
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelector(`.tab:contains(${category})`).classList.add('active');
-            products.filter(product => category === 'Todas' || product.category === category).forEach(product => {
-                const menuItem = document.createElement('div');
-                menuItem.classList.add('menu-item');
-                menuItem.innerHTML = `
-                    <div>
-                        <h3>${product.name}</h3>
-                        <p>$${product.price}</p>
-                    </div>
-                    <button onclick="addToCart('${product.name}', ${product.price})">Agregar</button>
-                `;
-                menuContainer.appendChild(menuItem);
-            });
-        }
-
-        function addToCart(name, price) {
-            const cartItem = cart.find(item => item.name === name);
-            if (cartItem) {
-                cartItem.quantity += 1;
+            // Validar credenciales (esto es solo un ejemplo, en una aplicación real usarías autenticación segura)
+            if (username === 'admin' && password === 'admin') {
+                localStorage.setItem('authenticated', 'true');
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('appSection').style.display = 'block';
+                document.querySelector('.floating-footer').style.display = 'flex';
+                loadProducts();
             } else {
-                cart.push({ name, price, quantity: 1 });
+                alert('Usuario o contraseña incorrectos');
             }
-            renderCart();
         }
 
-        function removeFromCart(name) {
-            const cartItemIndex = cart.findIndex(item => item.name === name);
-            if (cartItemIndex > -1) {
-                cart[cartItemIndex].quantity -= 1;
-                if (cart[cartItemIndex].quantity === 0) {
-                    cart.splice(cartItemIndex, 1);
-                }
-            }
-            renderCart();
+        function logout() {
+            localStorage.removeItem('authenticated');
+            window.location.reload();
         }
 
-        function renderCart() {
-            const cartItemsContainer = cartContainer.querySelector('.cart-items');
-            if (cartItemsContainer) {
-                cartItemsContainer.remove();
-            }
-            const newCartItemsContainer = document.createElement('div');
-            newCartItemsContainer.classList.add('cart-items');
-            let subtotal = 0;
-            cart.forEach(item => {
-                subtotal += item.price * item.quantity;
-                const cartItem = document.createElement('div');
-                cartItem.classList.add('cart-item');
-                cartItem.innerHTML = `
-                    <div>
-                        <h3>${item.name}</h3>
-                        <p>$${item.price} x ${item.quantity}</p>
+        function loadProducts() {
+            const productList = document.getElementById('productList');
+            const ordersList = document.getElementById('ordersList');
+            const subtotalElement = document.getElementById('subtotal');
+            const cartItems = document.getElementById('cartItems');
+            const cartList = document.getElementById('cartList');
+            const cartSubtotal = document.getElementById('cartSubtotal');
+            const cartCounter = document.getElementById('cartCounter');
+
+            const products = [
+                { name: 'Pizza', price: 10.00 },
+                { name: 'Hamburguesa', price: 8.00 },
+                { name: 'Sushi', price: 12.00 },
+                { name: 'Taco', price: 5.00 },
+                { name: 'Ensalada', price: 7.00 },
+                { name: 'Pasta', price: 9.00 },
+                { name: 'Empanada', price: 3.00 },
+                { name: 'Hot Dog', price: 4.00 },
+                { name: 'Burrito', price: 6.00 },
+                { name: 'Sandwich', price: 5.50 },
+                { name: 'Croissant', price: 2.50 },
+                { name: 'Bagel', price: 3.50 },
+                { name: 'Panini', price: 6.50 },
+                { name: 'Quesadilla', price: 7.50 },
+                { name: 'Wrap', price: 6.00 },
+                { name: 'Tostada', price: 4.50 },
+                { name: 'Aguacate', price: 2.00 },
+                { name: 'Fajita', price: 8.50 },
+                { name: 'Pizza Margarita', price: 11.00 },
+                { name: 'Pizza Pepperoni', price: 12.00 },
+                { name: 'Pizza Hawaiana', price: 13.00 },
+                { name: 'Pizza Vegana', price: 14.00 },
+                { name: 'Hamburguesa Vegana', price: 9.00 },
+                { name: 'Hamburguesa con Queso', price: 10.00 },
+                { name: 'Sushi Roll', price: 15.00 },
+                { name: 'Sushi Nigiri', price: 16.00 },
+                { name: 'Taco de Pollo', price: 6.00 },
+                { name: 'Taco de Res', price: 7.00 },
+                { name: 'Ensalada Caesar', price: 8.00 },
+                { name: 'Ensalada Griega', price: 8.50 },
+                { name: 'Pasta Alfredo', price: 12.00 },
+                { name: 'Pasta Carbonara', price: 13.00 },
+                { name: 'Pasta Bolognesa', price: 14.00 },
+                { name: 'Empanada de Pollo', price: 4.00 },
+                { name: 'Empanada de Carne', price: 5.00 },
+                { name: 'Hot Dog con Queso', price: 5.00 },
+                { name: 'Burrito de Pollo', price: 7.00 },
+                { name: 'Burrito de Res', price: 8.00 },
+                { name: 'Sandwich de Pavo', price: 6.00 }
+            ];
+
+            productList.innerHTML = '';
+            products.forEach(product => {
+                const productItem = document.createElement('div');
+                productItem.className = 'product-item';
+                productItem.innerHTML = `
+                    <span>${product.name}</span>
+                    <span>$${product.price.toFixed(2)}</span>
+                    <div style="display: flex; align-items: center;">
+                        <button onclick="updateQuantity('${product.name}', -1)">-</button>
+                        <input type="number" class="product-quantity" value="0" min="0" data-name="${product.name}" data-price="${product.price.toFixed(2)}">
+                        <button onclick="updateQuantity('${product.name}', 1)">+</button>
                     </div>
-                    <button onclick="removeFromCart('${item.name}')">Eliminar</button>
+                    <button onclick="editProduct('${product.name}')">Editar</button>
                 `;
-                newCartItemsContainer.appendChild(cartItem);
+                productList.appendChild(productItem);
             });
-            cartContainer.insertBefore(newCartItemsContainer, cartTotal);
-            cartTotal.textContent = `Subtotal: $${subtotal.toFixed(2)}`;
-        }
 
-        document.getElementById('order-btn').addEventListener('click', () => {
-            if (cart.length === 0) {
-                alert('Por favor, agrega al menos un elemento al carrito.');
-                return;
+            function updateQuantity(productName, change) {
+                const input = document.querySelector(`input[data-name="${productName}"]`);
+                let quantity = parseInt(input.value);
+                quantity = isNaN(quantity) ? 0 : quantity;
+                quantity += change;
+                if (quantity < 0) quantity = 0;
+                input.value = quantity;
+                calculateSubtotal();
             }
 
-            let orderText = 'Hola, quisiera ordenar:\n';
-            cart.forEach(item => {
-                orderText += `${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
-            });
-            orderText += `\nSubtotal: $${cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}`;
-
-            const whatsappNumber = '1234567890';  // Cambia esto por el número de WhatsApp del restaurante
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderText)}`;
-            window.open(whatsappUrl, '_blank');
-        });
-
-        document.getElementById('share-btn').addEventListener('click', () => {
-            if (cart.length === 0) {
-                alert('Por favor, agrega al menos un elemento al carrito.');
-                return;
+            function calculateSubtotal() {
+                let subtotal = 0;
+                let itemCount = 0;
+                cartList.innerHTML = '';
+                const productQuantities = document.querySelectorAll('.product-quantity');
+                productQuantities.forEach(input => {
+                    const quantity = parseInt(input.value);
+                    if (quantity > 0) {
+                        const price = parseFloat(input.getAttribute('data-price'));
+                        subtotal += price * quantity;
+                        itemCount += quantity;
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `
+                            <span>${input.getAttribute('data-name')} x ${quantity} - $${(price * quantity).toFixed(2)}</span>
+                            <button onclick="removeFromCart('${input.getAttribute('data-name')}')">❌</button>
+                        `;
+                        cartList.appendChild(listItem);
+                    }
+                });
+                subtotalElement.innerText = subtotal.toFixed(2);
+                cartSubtotal.innerText = subtotal.toFixed(2);
+                cartCounter.innerText = itemCount;
             }
 
-            let shareText = 'Mira mi lista de productos:\n';
-            cart.forEach(item => {
-                shareText += `${item.name} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`;
-            });
-            shareText += `\nSubtotal: $${cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}`;
+            function removeFromCart(productName) {
+                const input = document.querySelector(`input[data-name="${productName}"]`);
+                input.value = 0;
+                calculateSubtotal();
+            }
 
-            const shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-            window.open(shareUrl, '_blank');
-        });
-    </script>
-</body>
-</html>
+            function placeOrder() {
+                const customerName = document.getElementById('customerName').value;
+                const customerAddress = document.getElementById('customerAddress').value;
+                const selectedProducts = Array.from(document.querySelectorAll('.product-quantity'))
+                    .filter(input => parseInt(input.value) > 0)
+                    .map(input => `${input.getAttribute('data-name')} x ${input.value}`);
+                
+                if (customerName === '' || customerAddress === '' || selectedProducts.length === 0) {
+                    alert('Por favor, complete todos los campos y seleccione al menos un producto');
+                    return;
+                }
+
+                const order = {
+                    customerName,
+                    customerAddress,
+                    selectedProducts,
+                    subtotal: subtotalElement.innerText
+                };
+
+                addOrderToList(order);
+
+                document.getElementById('customerName').value = '';
+                document.getElementById('customerAddress').value = '';
+                document.querySelectorAll('.product-quantity').forEach(input => input.value = 0);
+                calculateSubtotal();
+            }
+
+            function addOrderToList(order) {
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `
+                    <p><strong>Cliente:</strong> ${order.customerName}</p>
+                    <p><strong>Dirección:</strong> ${order.customerAddress}</p>
+                    <
